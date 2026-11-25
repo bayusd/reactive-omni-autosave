@@ -15,6 +15,11 @@ contract AutoSaveReactive {
     ISystemContract internal constant SYSTEM =
         ISystemContract(0x8888888888888888888888888888888888888888);
 
+    /// @notice Wildcard value for topic positions we do not filter on
+    /// (official docs, Subscriptions — REACTIVE_IGNORE).
+    uint256 internal constant REACTIVE_IGNORE =
+        0xa65f96fc951c35ead38878e0f0b7a3c744a6f5ccc1476b313353ce31712313ad;
+
     uint64 internal constant CALLBACK_GAS_LIMIT = 500_000;
 
     uint256 public immutable originChainId;
@@ -34,21 +39,27 @@ contract AutoSaveReactive {
         uint256 originChainId_,
         address originContract_,
         uint256 depositTopic0_,
-        uint256 saverTopic1_
+        uint256 saverTopic1_,
+        address recipient_
     ) payable {
         owner = msg.sender;
         originChainId = originChainId_;
         originContract = originContract_;
         depositTopic0 = depositTopic0_;
         saverTopic1 = saverTopic1_;
+        recipient = recipient_;
 
+        // DepositMade has only topic0 (signature) + topic1 (saver);
+        // topic2/topic3 do not exist, so they must be REACTIVE_IGNORE —
+        // literal 0 would demand a third/fourth topic equal to zero and
+        // the filter could never match (stage-1 FILTER_MISMATCH bug).
         SYSTEM.subscribe(
             originChainId_,
             originContract_,
             depositTopic0_,
             saverTopic1_,
-            0,
-            0
+            REACTIVE_IGNORE,
+            REACTIVE_IGNORE
         );
     }
 

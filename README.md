@@ -40,22 +40,31 @@ landing in the pot never re-trigger the automation.
 | Contract | Chain | Address |
 | --- | --- | --- |
 | AutoSavePot | Base Sepolia (84532) | `0x5e50bd3892Dd44e38D98e272ceE8604331bda87b` |
-| AutoSaveReactive | Reactive Lasna (5318007) | `0x23c42C2c27AdcDb5FC84Ff04ec6e5B7117df799D` |
-| AutoSaveExecutor | Base Sepolia (84532) | `0x59bA7DB649EEc5763ED2f42807eAeb603DFf8583` |
+| AutoSaveReactive v1.1 | Reactive Lasna (5318007) | `0x704F877130F504A45881cE494777356fEb78d30C` |
+| AutoSaveExecutor v1.1 | Base Sepolia (84532) | `0xd06fBEa650d47c7339728a701C5b4fF4E4Cc4Dbf` |
 
 Deployer / saver (agent EOA): `0xbcFe81358b53f7d9Bf2A5eF6c0D03B7f447651A1`
 
-Deploy transactions (v1):
+Deploy transactions (v1.1, stage 2 — loop verified firing, see
+[SUBMISSION.md](SUBMISSION.md)):
 
 | Contract | Deploy tx |
 | --- | --- |
 | AutoSavePot | `0xb98845a81bcb2c6375f6724451b1ab695f8f7f5c1b7c8af544bc8db132a2c885` |
-| AutoSaveReactive | `0xdd37633568fc472f56cbcbc0ba7a579a4f2e7126532ee3cc21903efccf996935` |
-| AutoSaveExecutor | `0x7ea916419a31fdf4e2c12f9b4e1850685f5c584b81d5210d70ae720908ef27f2` |
+| AutoSaveReactive v1.1 | `0x8e90d9981df51f1ffd838090965aec519fb50cada9e82c77bb11f329632d50ee` |
+| AutoSaveExecutor v1.1 | `0xa5a8e1d5faff02f6fe1034642949ef80617df20961ff9df87665fa1db3e4fa5c` |
 
-A classic-API v2 pair and a CRON diagnostic contract are also deployed —
-see [SUBMISSION.md](SUBMISSION.md) for the full table, trigger transactions,
-and status.
+Full loop (25 Nov 2026, ~14 seconds): pot deposit
+`0xc33c5d7e5f1f02493c63dfacf025c9e7858e979674dc3dca317c8db7e4d920c9` →
+reactive tx
+`0x34f18a01bf757965da6044759e615376eb0ed14b384c062251331d44130ebc31` →
+callback tx
+`0x1dcc5461a5d920cba8a65c3b172c0faf7d11d0094ba29ae1d4844934b718749a`
+(10% sweep, 0.000002 ETH, landed in the pot).
+
+A classic-API v2 pair and a CRON diagnostic contract were also deployed in
+stage 1 — both retired (classic architecture blacklisted on Lasna Omni),
+see [SUBMISSION.md](SUBMISSION.md) for the full history.
 
 Funding follows the documented Reactive economy model: both the reactive
 contract and the executor hold **reserves** with the system contract /
